@@ -1,9 +1,11 @@
 "use client";
 
+import Image from "next/image";
 import { useState } from "react";
 
 type AppId = "projects" | "classes" | "gallery" | "games" | "about";
 
+//Apps available on the DS
 const APPS: { id: AppId; label: string }[] = [
   { id: "projects", label: "Projects" },
   { id: "classes", label: "Classes" },
@@ -12,60 +14,105 @@ const APPS: { id: AppId; label: string }[] = [
   { id: "about", label: "About" },
 ];
 
+// Button hit boxes
+const BUTTONS = [
+  // D-pad
+  { id: "UP",    left: "13.75%", top: "53.81%", width: "6.75%", height: "6.75%" },
+  { id: "DOWN",  left: "14.75%", top: "66.77%", width: "6.75%", height: "6.75%" },
+  { id: "LEFT",  left: "7.50%",  top: "60.29%", width: "6.75%", height: "6.75%" },
+  { id: "RIGHT", left: "21.00%", top: "60.29%", width: "6.75%", height: "6.75%" },
+
+  // Face buttons (diamond)
+  { id: "X", left: "78.75%", top: "53.81%", width: "6.75%", height: "6.75%" },
+  { id: "A", left: "84.25%", top: "58.29%", width: "6.75%", height: "6.75%" },
+  { id: "Y", left: "72.75%", top: "58.29%", width: "6.75%", height: "6.75%" },
+  { id: "B", left: "78.75%", top: "64.77%", width: "6.75%", height: "6.75%" },
+
+  // Start / Select (small buttons)
+  { id: "START",  left: "74.12%", top: "75.19%", width: "4.12%", height: "4.12%" },
+  { id: "SELECT", left: "74.12%", top: "81.66%", width: "4.12%", height: "4.12%" },
+
+  // Power button
+  { id: "POWER", left: "17.85%", top: "77.75%", width: "5.80%", height: "5.80%" },
+] as const;
+
+// Screen areas as % of the full 800x772 image
+const TOP = { left: "27.75%", top: "13.34%", width: "44.38%", height: "29.02%" };
+const BOTTOM = { left: "29.13%", top: "54.27%", width: "41.38%", height: "29.53%" };
+
 export default function DS() {
   const [active, setActive] = useState<AppId>("projects");
+  const label = APPS.find(a => a.id === active)?.label ?? active;
 
   return (
-    <div className="w-full max-w-[520px]">
-      {/* DS body */}
-      <div className="rounded-[28px] bg-zinc-900/90 border border-white/10 shadow-2xl p-5">
-        {/* Top screen */}
-        <div className="rounded-[18px] bg-black/70 border border-white/10 p-4 h-[240px] flex items-center justify-center">
-          <div className="text-center">
-            <div className="text-2xl font-semibold">{labelFor(active)}</div>
-            <div className="text-white/60 mt-2">
-              Placeholder content — next we’ll make this a real “app”.
+    <div className="w-full max-w-[560px]">
+      <div className="relative w-full" style={{ aspectRatio: "800 / 772" }}>
+        {/* Top Screen Content */}
+        <div className="absolute bg-black/90 overflow-hidden" style={TOP}>
+          <div className="h-full w-full flex items-center justify-center text-center p-3">
+            <div>
+              <div className="text-xl font-semibold">{label}</div>
+              <div className="text-white/60 text-sm mt-2">Top screen content!</div>
             </div>
           </div>
         </div>
 
-        {/* Hinge */}
-        <div className="h-3" />
-
-        {/* Bottom screen (touch UI) */}
-        <div className="rounded-[18px] bg-black/60 border border-white/10 p-4">
-          <div className="grid grid-cols-2 gap-3">
-            {APPS.map((a) => (
+        {/* Bottom screen content (touch UI) */}
+        <div className="absolute bg-black/90 overflow-hidden" style={BOTTOM}>
+          <div className="h-full w-full p-3 grid grid-cols-2 gap-2">
+            {APPS.map(a => (
               <button
                 key={a.id}
                 onClick={() => setActive(a.id)}
-                className={[
-                  "rounded-xl border px-4 py-3 text-left transition",
-                  a.id === active
-                    ? "bg-white/15 border-white/30"
-                    : "bg-white/5 border-white/10 hover:bg-white/10",
-                ].join(" ")}
+                className={`rounded-lg border px-3 py-2 text-left text-sm transition
+                  ${a.id === active ? "bg-white/15 border-white/30" : "bg-white/5 border-white/10 hover:bg-white/10"}`}
               >
-                <div className="text-sm uppercase tracking-wide text-white/60">
-                  App
-                </div>
-                <div className="text-lg font-medium">{a.label}</div>
+                {a.label}
               </button>
             ))}
           </div>
-
-          {/* Fake hardware row */}
-          <div className="mt-4 flex items-center justify-between text-white/40 text-xs">
-            <div>D-Pad</div>
-            <div>Start • Select</div>
-            <div>A • B</div>
-          </div>
         </div>
+
+        {/* BUTTON HITBOXES */}
+        {BUTTONS.map(b => (
+          <button
+            key={b.id}
+            aria-label={b.id}
+            onClick={() => console.log("pressed", b.id)}
+            className="absolute bg-red-500/30 outline outline-2 outline-red-500"
+            style={{
+              left: b.left,
+              top: b.top,
+              width: b.width,
+              height: b.height,
+              zIndex: 30,
+            }}
+          />
+        ))}
+
+        {/* DS overlay */}
+        <Image
+          src="/assets/ds/ds-frame.png"
+          alt="DS frame"
+          fill
+          priority
+          className="object-contain select-none"
+          style={{ zIndex: 10 }}
+        />
+
+
+        {/* DS overlay (USE CUTOUT VERSION) */}
+        
+        {/* 
+        <Image
+          src="/assets/ds/ds-frame.png"
+          alt="DS frame"
+          fill
+          priority
+          className="object-contain pointer-events-none select-none"
+        /> 
+        */}
       </div>
     </div>
   );
-}
-
-function labelFor(id: AppId) {
-  return APPS.find((a) => a.id === id)?.label ?? id;
 }
