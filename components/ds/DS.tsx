@@ -17,19 +17,19 @@ const APPS: { id: AppId; label: string }[] = [
 // Button hit boxes
 const BUTTONS = [
   // D-pad
-  { id: "UP",    left: "13.75%", top: "53.81%", width: "6.75%", height: "6.75%" },
-  { id: "DOWN",  left: "14.75%", top: "66.77%", width: "6.75%", height: "6.75%" },
-  { id: "LEFT",  left: "7.50%",  top: "60.29%", width: "6.75%", height: "6.75%" },
-  { id: "RIGHT", left: "21.00%", top: "60.29%", width: "6.75%", height: "6.75%" },
+  { id: "UP",    left: "15.20%", top: "56.91%", width: "4.50%", height: "4.75%" },
+  { id: "DOWN",  left: "15.20%", top: "64.77%", width: "4.50%", height: "4.75%" },
+  { id: "LEFT",  left: "11.50%",  top: "61.29%", width: "4.75%", height: "4.50%" },
+  { id: "RIGHT", left: "19.50%", top: "61.29%", width: "4.75%", height: "4.50%" },
 
   // Face buttons (diamond)
-  { id: "X", left: "78.75%", top: "53.81%", width: "6.75%", height: "6.75%" },
-  { id: "A", left: "84.25%", top: "58.29%", width: "6.75%", height: "6.75%" },
-  { id: "Y", left: "72.75%", top: "58.29%", width: "6.75%", height: "6.75%" },
-  { id: "B", left: "78.75%", top: "64.77%", width: "6.75%", height: "6.75%" },
+  { id: "X", left: "79.55%", top: "55.81%", width: "4.75%", height: "4.75%" },
+  { id: "A", left: "84.25%", top: "60.80%", width: "4.75%", height: "4.75%" },
+  { id: "Y", left: "74.75%", top: "60.80%", width: "4.75%", height: "4.75%" },
+  { id: "B", left: "79.55%", top: "65.50%", width: "4.75%", height: "4.75%" },
 
   // Start / Select (small buttons)
-  { id: "START",  left: "74.12%", top: "75.19%", width: "4.12%", height: "4.12%" },
+  { id: "START",  left: "74.12%", top: "75.59%", width: "4.12%", height: "4.12%" },
   { id: "SELECT", left: "74.12%", top: "81.66%", width: "4.12%", height: "4.12%" },
 
   // Power button
@@ -79,7 +79,7 @@ export default function DS() {
             key={b.id}
             aria-label={b.id}
             onClick={() => console.log("pressed", b.id)}
-            className="absolute bg-red-500/30 outline outline-2 outline-red-500"
+            className="absolute bg-transparent"
             style={{
               left: b.left,
               top: b.top,
@@ -90,20 +90,8 @@ export default function DS() {
           />
         ))}
 
-        {/* DS overlay */}
-        <Image
-          src="/assets/ds/ds-frame.png"
-          alt="DS frame"
-          fill
-          priority
-          className="object-contain select-none"
-          style={{ zIndex: 10 }}
-        />
-
-
-        {/* DS overlay (USE CUTOUT VERSION) */}
         
-        {/* 
+        {/* DS overlay (USE CUTOUT VERSION) */}
         <Image
           src="/assets/ds/ds-frame.png"
           alt="DS frame"
@@ -111,7 +99,7 @@ export default function DS() {
           priority
           className="object-contain pointer-events-none select-none"
         /> 
-        */}
+        
       </div>
     </div>
   );
