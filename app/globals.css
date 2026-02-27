@@ -2,11 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
+.font-Rodin {
+  font-family: var(--font-press-start), cursive;
+}
+
 html, body {
   height: 100%;
 }
 
 body {
-  background: radial-gradient(circle at top, #1f2937, #0b1020);
-  color: white;
+  background: white;
+  color: black;
 }
