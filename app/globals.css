@@ -14,3 +14,30 @@ body {
   background: white;
   color: black;
 }
+
+@keyframes coinFlight {
+  0% {
+    transform: translate(-50%, 0) translateX(0) translateY(0) scale(0.85);
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+  }
+  45% {
+    transform: translate(-50%, 0) translateX(calc(var(--coin-x) * 0.6)) translateY(var(--coin-peak)) scale(1);
+  }
+  100% {
+    transform: translate(-50%, 0) translateX(var(--coin-x)) translateY(var(--coin-end)) scale(1);
+    opacity: 1;
+  }
+}
+
+.coin-flight {
+  width: 18px;
+  height: 18px;
+  --coin-x: 0px;
+  --coin-peak: -100px;
+  --coin-end: 70vh;
+  animation: coinFlight 2.8s ease-out forwards;
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.25));
+}
