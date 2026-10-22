@@ -44,6 +44,53 @@ body {
   }
 }
 
+/* 3DS HOME Menu touch-screen background: light grey with subtle stripes */
+.ds-home-bg {
+  background-color: #e8eaeb;
+  background-image:
+    repeating-linear-gradient(
+      0deg,
+      rgba(255, 255, 255, 0.55) 0px,
+      rgba(255, 255, 255, 0.55) 5px,
+      rgba(0, 0, 0, 0.03) 5px,
+      rgba(0, 0, 0, 0.03) 6px
+    ),
+    linear-gradient(180deg, #f5f6f6 0%, #e3e6e7 100%);
+}
+
+/* Signature teal corner-bracket focus indicator: gentle breathe/pulse */
+@keyframes dsFocusPulse {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.65;
+    transform: scale(1.06);
+  }
+}
+
+.focus-bracket {
+  animation: dsFocusPulse 1.5s ease-in-out infinite;
+  filter: drop-shadow(0 0 2px rgba(45, 212, 191, 0.65));
+}
+
+/* Top-screen banner icon: very gentle bob so focus changes feel alive */
+@keyframes dsBannerBob {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-1.5px);
+  }
+}
+
+.banner-icon {
+  animation: dsBannerBob 2.4s ease-in-out infinite;
+}
+
 .coin-flight {
   width: 18px;
   height: 18px;
