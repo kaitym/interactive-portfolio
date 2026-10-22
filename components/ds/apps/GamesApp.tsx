@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { BottomScreen, TopScreen, type AppProps } from "../screens";
 import { playAsset } from "../sound";
 import { TouchButton } from "./ContentShell";
@@ -19,20 +19,31 @@ const GAMES: { id: GameId; label: string; blurb: string; accent: string }[] = [
 export default function GamesApp({ framePress, goHome }: AppProps) {
   const [game, setGame] = useState<GameId | null>(null);
   const toMenu = () => setGame(null);
+  // The press that opens a game (e.g. "A" on the menu) must not be replayed
+  // into the game itself — Snake would start instantly, Reaction would
+  // start its timer, and a stale "B" could bounce straight back out.
+  // Remember the seq at selection time and only forward newer presses.
+  const openSeqRef = useRef(0);
+  const selectGame = (id: GameId) => {
+    openSeqRef.current = framePress?.seq ?? 0;
+    setGame(id);
+  };
+  const gameFramePress =
+    framePress && framePress.seq > openSeqRef.current ? framePress : null;
 
   useEffect(() => {
     if (!framePress || game) return;
     if (framePress.id === "B") goHome();
     if (framePress.id === "A") {
       playAsset("open");
-      setGame("snake");
+      selectGame("snake");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [framePress, game]);
 
-  if (game === "snake") return <Snake framePress={framePress} onExit={toMenu} goHome={goHome} />;
-  if (game === "memory") return <MemoryMatch framePress={framePress} onExit={toMenu} goHome={goHome} />;
-  if (game === "reaction") return <ReactionGame framePress={framePress} onExit={toMenu} goHome={goHome} />;
+  if (game === "snake") return <Snake framePress={gameFramePress} onExit={toMenu} goHome={goHome} />;
+  if (game === "memory") return <MemoryMatch framePress={gameFramePress} onExit={toMenu} goHome={goHome} />;
+  if (game === "reaction") return <ReactionGame framePress={gameFramePress} onExit={toMenu} goHome={goHome} />;
 
   return (
     <>
@@ -55,7 +66,7 @@ export default function GamesApp({ framePress, goHome }: AppProps) {
                 type="button"
                 onClick={() => {
                   playAsset("open");
-                  setGame(g.id);
+                  selectGame(g.id);
                 }}
                 className="flex flex-1 items-center gap-2 overflow-hidden rounded-xl border-2 border-black/20 bg-gradient-to-b from-white to-neutral-100 text-left shadow transition hover:border-black/50"
               >
